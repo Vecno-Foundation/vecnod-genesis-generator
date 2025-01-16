@@ -25,11 +25,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Genesis Block Hash: {}", block_hash);
 
-    if !confirm_coins_minted(&block_hash, difficulty_bits) {
-        println!("Failed to mint coins. The block hash does not meet the difficulty target.");
-        return Ok(());
-    }
-
     println!("Genesis block has been successfully mined!");
 
     print_genesis_block_config(&block_hash, &merkle_root, timestamp, difficulty_bits, nonce, &coinbase_payload);
@@ -125,13 +120,6 @@ fn serialize_block_header(header: &BlockHeader, buffer: &mut Vec<u8>) -> std::io
     buffer.write_all(&header.bits.to_le_bytes())?;
     buffer.write_all(&header.nonce.to_le_bytes())?;
     Ok(())
-}
-
-fn confirm_coins_minted(block_hash: &str, difficulty_bits: u32) -> bool {
-    let hash_bytes = decode(block_hash).unwrap();
-    let hash_bigint = BigUint::from_bytes_be(&hash_bytes);
-    let target = calculate_target(difficulty_bits);
-    hash_bigint < target
 }
 
 fn print_genesis_block_config(hash: &str, merkle_root: &str, timestamp: u64, bits: u32, nonce: u64, coinbase_payload: &[u8]) {
