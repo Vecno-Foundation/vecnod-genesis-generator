@@ -6,7 +6,7 @@ use num_bigint::BigUint;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let timestamp = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis() as u64;
-    let difficulty_bits = 0x1e7fffff;
+    let difficulty_bits = 0x1e007fff;
 
     let coinbase_payload = vec![
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Blue score
@@ -132,7 +132,7 @@ fn print_genesis_block_config(hash: &str, merkle_root: &str, timestamp: u64, bit
     print_byte_array(merkle_root);
     println!("    ]),");
     println!("    utxo_commitment: EMPTY_MUHASH,");
-    println!("    timestamp: 0x{:08x},", timestamp);
+    println!("    timestamp: {},", timestamp / 1000); // Convert milliseconds to seconds
     println!("    bits: 0x{:08x},", bits);
     println!("    nonce: 0x{:08x},", nonce);
     println!("    daa_score: 0, // Checkpoint DAA score");
